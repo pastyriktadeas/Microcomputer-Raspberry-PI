@@ -1,0 +1,33 @@
+version: '3'
+services:
+  nodered:
+    container_name: nodered
+    image: nodered/node-red:latest-minimal
+    ports:
+      - 1880:1880
+    volumes:
+      - ./nodered:/data
+  mqtt:
+    container_name: mqtt
+    image: eclipse-mosquitto
+    ports:
+      - 1883:1883
+      - 9001:9001
+    volumes:
+      - ./mqtt/log:/mosquitto/log
+      - ./mqtt/data:/mosquitto/data
+      - ./mqtt/config/mosquitto.conf:/mosquitto/config/mosquitto.conf
+  influxdb:
+    container_name: influx
+    image: influxdb
+    ports:
+      - 8086:8086
+    volumes:
+      - ./influx/data:/var/lib/influxdb2
+      - ./influx/config:/etc/influxdb2
+  grafana:
+    container_name: grafana
+    image: grafana/grafana
+    restart: unless-stopped
+    ports:
+      - 3000:3000

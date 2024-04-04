@@ -1,0 +1,57 @@
+<!-- templates/camera.html -->
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Záznam kamery</title>
+    <style>
+        body {
+            text-align: center;
+            background-color: #3C5E61; /* Změňte na požadovanou barvu podle vašich preferencí */
+            color: white; /* Barva textu pro kontrast s pozadím */
+        }
+
+        #camera-container {
+            display: inline-block;
+            position: relative;
+        }
+
+        #camera-feed {
+            width: 800px;
+            height: 640px;
+            border: 1px solid #000;
+        }
+
+        #motion_info {
+            margin-top: 20px;
+            text-align: left;
+        }
+       #small-camera-feed {
+            width: 160px;
+            height: 120px;
+            border: 1px solid #000;
+            position: absolute;
+            top: 10px;
+            right: 10px;
+        }
+    </style>
+</head>
+<body>
+    <h1>Záznam kamery</h1>
+    <div id="camera-container">
+        <img id="camera-feed" src="{{ url_for('video_feed') }}" alt="Camera Feed">
+        <div id="motion_info">Log detekce</div>
+        <img id="small-camera-feed" src="{{ url_for('small_video_feed') }}" alt="Small Camera Feed">
+    </div>
+    <script>
+        setInterval(function() { 
+            fetch("/motion_status")
+                .then(response => response.text())
+                .then(data => {
+                  document.getElementById("motion_info").innerHTML = data;
+                });
+        }, 1000);
+    </script>
+</body>
+</html>
